@@ -7,8 +7,11 @@ Created on Sun Feb 15 20:07:24 2015
 
 import pandas
 import sqlite3
+import numpy
 
 connection = sqlite3.connect("./lahman2013.sqlite")
+
+CROSS_VALIDATION_AMOUNT = 0.2
 
 sql_query = """
 SELECT
@@ -27,3 +30,12 @@ GROUP BY Fielding.playerID"""
 
 df = pandas.read_sql(sql_query, connection)
 connection.close()
+
+
+df.count()
+df.dropna(inplace = True)
+
+holdout_num = round(len(df.index) * CROSS_VALIDATION_AMOUNT)
+
+testing_indices  = numpy.random.choice(df.index, len(df.index) * 0.2, replace = False)
+training_indices = df.index[~df.index.isin(testing_indices)]
