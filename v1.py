@@ -51,3 +51,17 @@ response_training = response_variables.ix[training_indices]
 #create explanation's (what is causing the effect: number of runs, games started, and strikouets thrown) training and testing series
 explanation_testing = explanation_variables.ix[testing_indices]
 explanation_training = explanation_variables.ix[training_indices]
+
+from sklearn.neighbors import KNeighborsClassifier
+classifier_KNN = KNeighborsClassifier()
+
+classifier_KNN.fit(explanation_training, response_training)
+
+predicted_response_variables = classifier_KNN.predict(explanation_testing)
+
+from __future__ import division #without this, division acts real whacky
+
+number_correct = len(response_testing[response_testing == predicted_response_variables])
+percent_correct = number_correct / len(response_testing)
+
+print percent_correct
