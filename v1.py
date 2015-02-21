@@ -4,10 +4,12 @@ Created on Sun Feb 15 20:07:24 2015
 
 @author: james
 """
+from __future__ import division #without this, division acts real whacky
 
 import pandas
 import sqlite3
 import numpy
+import matplotlib.pyplot as plt
 
 connection = sqlite3.connect("./lahman2013.sqlite")
 
@@ -59,9 +61,15 @@ classifier_KNN.fit(explanation_training, response_training)
 
 predicted_response_variables = classifier_KNN.predict(explanation_testing)
 
-from __future__ import division #without this, division acts real whacky
 
 number_correct = len(response_testing[response_testing == predicted_response_variables])
 percent_correct = number_correct / len(response_testing)
 
 print percent_correct
+
+
+from sklearn.cross_validation import cross_val_score
+scores = cross_val_score(classifier_KNN, explanation_variables, response_variables, cv = 10, scoring = "accuracy")
+
+mean_accuracy = numpy.mean(scores)
+print mean_accuracy ## ~87%
