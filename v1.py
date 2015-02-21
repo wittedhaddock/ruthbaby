@@ -84,3 +84,6 @@ for k in k_range:
 
 
 print score_averages
+
+plt.figure()
+plt.plot(k_range, score_averages)
