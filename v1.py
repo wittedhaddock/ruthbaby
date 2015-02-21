@@ -73,3 +73,14 @@ scores = cross_val_score(classifier_KNN, explanation_variables, response_variabl
 
 mean_accuracy = numpy.mean(scores)
 print mean_accuracy ## ~87%
+
+#tuning for k
+
+k_range = range(1, 30)
+score_averages = []
+for k in k_range:
+        knn = KNeighborsClassifier(n_neighbors=k,  p = 2)
+        score_averages.append(numpy.mean(cross_val_score(knn, explanation_variables, response_variables, cv = 10, scoring = "accuracy")))
+
+
+print score_averages
