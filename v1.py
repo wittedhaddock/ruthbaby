@@ -80,9 +80,12 @@ k_range = range(1, 30)
 score_averages = []
 for k in k_range:
         knn = KNeighborsClassifier(n_neighbors=k,  p = 2)
-        score_averages.append(numpy.mean(cross_val_score(knn, explanation_variables, response_variables, cv = 10, scoring = "accuracy")))
+        mean = numpy.mean(cross_val_score(knn, explanation_variables, response_variables, cv = 10, scoring = "accuracy"))
+        print "mean accuracy: " + str(mean) + " with k " + str(k)
+        score_averages.append(mean)
 
 
+#k = 6 is optimal
 print score_averages
 
 plt.figure()
