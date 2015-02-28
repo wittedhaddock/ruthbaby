@@ -46,7 +46,7 @@ response_test = response_series.ix[test_indices,]
 explanatory_test = explanatory_series.ix[test_indices,]
 
 
-KNN_Classifier = KNeighborsClassifier(n_neighbors = 6, p = 2)
+KNN_Classifier = KNeighborsClassifier(n_neighbors = 27, p = 2)
 KNN_Classifier.fit(explanatory_train, response_train)
 
 response_prediction = KNN_Classifier.predict(explanatory_test)
@@ -54,5 +54,14 @@ response_prediction = KNN_Classifier.predict(explanatory_test)
 num_correct = len(response_test[response_test == response_prediction])
 total_number = len(response_test)
 percent_correct = num_correct / total_number
-print "model has an accuracy of " + str(percent_correct) + "%"
-#30% accuracy
+print "model has an accuracy of " + str(percent_correct) + "%" #30% accuracy
+
+import sklearn.grid_search as gs
+knn = KNeighborsClassifier(p = 2)
+k_range = range(1, 30, 2)
+param_grid = dict(n_neighbors = k_range)
+grid = gs.GridSearchCV(knn, param_grid, cv = 5, scoring= "accuracy")
+grid.fit(explanatory_series, response_series)
+
+print grid.best_estimator_
+
