@@ -16,15 +16,21 @@ connection = sqlite3.connect("./lahman2013.sqlite")
 
 query = """
 
-SELECT SO as strikeouts, H as hits, R as runs FROM Batting
+SELECT SO as strikeouts, SB as stolen_bases, H as hits, IBB,  R as runs, HR as homeruns, G as games, AB as at_bats, G_batting as games_as_batter FROM Batting
 
 """
 df = pandas.read_sql(query, connection)
 connection.close()
 
+
+df["hits_per_game_as_batter"] = df.hits / df.games_as_batter
 df.dropna(inplace = True)
 response_series = df.runs
-explanatory_series = df[["strikeouts", "hits"]]
+
+
+
+
+explanatory_series = df[["hits_per_game_as_batter",  "homeruns"]]
 
 CV_AMOUNT = 0.2
 
@@ -40,7 +46,7 @@ response_test = response_series.ix[test_indices,]
 explanatory_test = explanatory_series.ix[test_indices,]
 
 
-KNN_Classifier = KNeighborsClassifier(n_neighbors = 3, p = 2)
+KNN_Classifier = KNeighborsClassifier(n_neighbors = 6, p = 2)
 KNN_Classifier.fit(explanatory_train, response_train)
 
 response_prediction = KNN_Classifier.predict(explanatory_test)
