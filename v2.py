@@ -41,3 +41,12 @@ response_series = df.is_inducted
 response_series.index[~response_series.index.isin(explanatory_variables.index)]
 #Assert that above is empty!
 #indices map mutually between both series. Good! 
+
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.cross_validation import cross_val_score
+
+classifier_naive_bayes = MultinomialNB()
+
+accuracy_scores = cross_val_score(classifier_naive_bayes, explanatory_variables, response_series, cv=10, scoring='accuracy', n_jobs = -1)
+
+print accuracy_scores.mean()
